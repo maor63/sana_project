@@ -1,0 +1,65 @@
+#!/bin/bash
+
+#run_time=5
+output_dir="sana_results_ba_n_1000_m_5_450_5_min_iter_5"
+mkdir -p $output_dir
+for run_time in 3 
+do
+	#mkdir -p "$run_time"min
+	
+	for m in 5 25 50 125 250 375 450
+	do
+		for base_network in ba_n1000_m"$m"_del_0.1nodes_dense ba_n1000_m"$m"_del_0.1nodes_equal ba_n1000_m"$m"_del_0.1nodes_sparse
+		do
+			for network in ba_n1000_m"$m"
+			do			
+
+				for i in {1..5}
+				do	
+				
+								
+					result_path="$PWD"/"$output_dir"/"$run_time"min/"ICS"/"$base_network"_"$network"_"$i"
+					mkdir -p "$result_path"				
+					
+					./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -ics 1 -truealignment ba_n1000_m5_del_0.1nodes.align
+					mv -v "$PWD"/sana.out "$result_path"/sana_ics.out
+					mv -v "$PWD"/sana.align "$result_path"/sana_ics.align
+					
+				
+					result_path="$PWD"/"$output_dir"/"$run_time"min/"EC"/"$base_network"_"$network"_"$i"
+					mkdir -p "$result_path"				
+					
+					./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -ec 1 -truealignment ba_n1000_m5_del_0.1nodes.align
+					
+					mv -v "$PWD"/sana.out "$result_path"/sana_ec.out
+					mv -v "$PWD"/sana.align "$result_path"/sana_ec.align
+					
+				
+					
+					for beta in 1 10 0.1
+					do
+					
+						
+						result_path="$PWD"/"$output_dir"/"$run_time"min/"F_beta_$beta"/"$base_network"_"$network"_"$i"
+						mkdir -p "$result_path"				
+						
+						./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -f_beta 1 -beta "$beta" -truealignment ba_n1000_m5_del_0.1nodes.align
+						mv -v "$PWD"/sana.out "$result_path"/"sana_f_beta_$beta.out"
+						mv -v "$PWD"/sana.align "$result_path"/"sana_f_beta_$beta.align"
+						
+						
+						
+						
+						
+					done
+					
+				done			
+			done
+			
+		done
+	
+	done
+	
+done
+
+ 

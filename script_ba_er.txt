@@ -1,0 +1,47 @@
+#!/bin/bash
+
+#run_time=3
+output_dir="ba_m6_rewire0.15_ec_s3_ics_5min_100_iter"
+mkdir -p $output_dir
+for run_time in 5 
+do	
+	#mkdir -p "$run_time"min
+	for i in {1..100}
+	do
+		for network in ba_1000_6 
+		do			
+			for rewire in 0.15
+			do		
+			
+				base_network="$network"_node_del_100_rewire_"$rewire" 
+				
+				for measure in ec ics 
+				do
+					result_path="$PWD"/"$output_dir"/"$run_time"min/"$measure"/"$base_network"_"$network"_"$i"
+					mkdir -p "$result_path"		
+					./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -"$measure" 1 -truealignment true_alignments/"$base_network".align
+					mv -v "$PWD"/sana.out "$result_path"/sana_"$measure".out
+					mv -v "$PWD"/sana.align "$result_path"/sana_"$measure".align
+				done
+                
+				result_path="$PWD"/"$output_dir"/"$run_time"min/s3/"$base_network"_"$network"_"$i"
+				mkdir -p "$result_path"		
+				./sana -g1 "$base_network" -g2 "$network" -t $run_time -truealignment true_alignments/"$base_network".align
+				mv -v "$PWD"/sana.out "$result_path"/sana_s3.out
+				mv -v "$PWD"/sana.align "$result_path"/sana_s3.align
+				
+				for beta in 0.253
+				do
+					result_path="$PWD"/"$output_dir"/"$run_time"min/"F$beta"/"$base_network"_"$network"_"$i"
+					mkdir -p "$result_path"	
+					./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -fbeta 1 -b "$beta" -truealignment true_alignments/"$base_network".align
+					mv -v "$PWD"/sana.out "$result_path"/"sana_f$beta.out"
+					mv -v "$PWD"/sana.align "$result_path"/"sana_f$beta.align"
+										
+				done
+			done				
+		done  			
+	done	
+done
+
+ 

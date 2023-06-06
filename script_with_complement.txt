@@ -1,0 +1,177 @@
+#!/bin/bash
+
+#run_time=3
+output_dir="y0_y0del100_add_0.1_remove_03_0.4_0.5_complement_remove_0.3_5min_10iter"
+mkdir -p $output_dir
+for run_time in 5 
+do
+	#mkdir -p "$run_time"min
+	
+	
+	for i in {1..10}
+	do	
+
+		for j in {0..4}
+		do
+			for network_type in syeast0_node_del_100_add_edges_0.1 syeast0_node_del_100_remove_edges_0.3 syeast0_node_del_100_remove_edges_0.4 syeast0_node_del_100_remove_edges_0.5 
+			do					
+				base_network="$network_type"_iter_"$j" 
+				
+				for network in syeast0
+				do			
+
+						#for beta in 1
+						#do
+						#	result_path="$PWD"/"$output_dir"/"$run_time"min/"Weighted_Accuracy_$beta"/"$base_network"_"$network"_"$i"
+						#	mkdir -p "$result_path"	
+						#	./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -wacc 1 -waccAlpha "$beta" -truealignment true_alignments/"$base_network".align
+						#	mv -v "$PWD"/sana.out "$result_path"/"sana_weighted_accuracy_$beta.out"
+						#	mv -v "$PWD"/sana.align "$result_path"/"sana_weighted_accuracy_$beta.align"
+						#						
+						#done
+						
+						for beta in 1 0.33 3 0.1 10 
+						do
+							result_path="$PWD"/"$output_dir"/"$run_time"min/"F$beta"/"$base_network"_"$network"_"$i"
+							mkdir -p "$result_path"	
+							./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -fbeta 1 -b "$beta" -truealignment true_alignments/"$base_network".align
+							mv -v "$PWD"/sana.out "$result_path"/"sana_f$beta.out"
+							mv -v "$PWD"/sana.align "$result_path"/"sana_f$beta.align"
+												
+						done
+						
+						result_path="$PWD"/"$output_dir"/"$run_time"min/"F_Beta_Star"/"$base_network"_"$network"_"$i"
+						mkdir -p "$result_path"		
+						./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -fbetastar 1 -truealignment true_alignments/"$base_network".align
+						mv -v "$PWD"/sana.out "$result_path"/"sana_f_beta_star.out"
+						mv -v "$PWD"/sana.align "$result_path"/"sana_f_beta_star.align"
+						
+						result_path="$PWD"/"$output_dir"/"$run_time"min/"EC"/"$base_network"_"$network"_"$i"
+						mkdir -p "$result_path"		
+						./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -ec 1 -truealignment true_alignments/"$base_network".align
+						mv -v "$PWD"/sana.out "$result_path"/"sana_ec.out"
+						mv -v "$PWD"/sana.align "$result_path"/"sana_ec.align"
+						
+						result_path="$PWD"/"$output_dir"/"$run_time"min/"ICS"/"$base_network"_"$network"_"$i"
+						mkdir -p "$result_path"		
+						./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -ics 1 -truealignment true_alignments/"$base_network".align
+						mv -v "$PWD"/sana.out "$result_path"/"sana_ics.out"
+						mv -v "$PWD"/sana.align "$result_path"/"sana_ics.align"
+						
+						#result_path="$PWD"/"$output_dir"/"$run_time"min/"MCC"/"$base_network"_"$network"_"$i"
+						#mkdir -p "$result_path"		
+						#./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -mcc 1 -truealignment true_alignments/"$base_network".align
+						#mv -v "$PWD"/sana.out "$result_path"/"sana_mcc.out"
+						#mv -v "$PWD"/sana.align "$result_path"/"sana_mcc.align"
+						#
+						#result_path="$PWD"/"$output_dir"/"$run_time"min/"MK"/"$base_network"_"$network"_"$i"
+						#mkdir -p "$result_path"		
+						#./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -mk 1 -truealignment true_alignments/"$base_network".align
+						#mv -v "$PWD"/sana.out "$result_path"/"sana_mk.out"
+						#mv -v "$PWD"/sana.align "$result_path"/"sana_mk.align"
+						#
+						#result_path="$PWD"/"$output_dir"/"$run_time"min/"BM"/"$base_network"_"$network"_"$i"
+						#mkdir -p "$result_path"		
+						#./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -bm 1 -truealignment true_alignments/"$base_network".align
+						#mv -v "$PWD"/sana.out "$result_path"/"sana_bm.out"
+						#mv -v "$PWD"/sana.align "$result_path"/"sana_bm.align"
+						
+						result_path="$PWD"/"$output_dir"/"$run_time"min/"S3"/"$base_network"_"$network"_"$i"
+						mkdir -p "$result_path"
+						./sana -g1 "$base_network" -g2 "$network" -t $run_time -truealignment true_alignments/"$base_network".align
+						mv -v "$PWD"/sana.out "$result_path"/sana_s3.out
+						mv -v "$PWD"/sana.align "$result_path"/sana_s3.align
+
+						result_path="$PWD"/"$output_dir"/"$run_time"min/"F_Beta_Hash"/"$base_network"_"$network"_"$i"
+						mkdir -p "$result_path"		
+						./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -fbetahash 1 -truealignment true_alignments/"$base_network".align
+						mv -v "$PWD"/sana.out "$result_path"/"sana_f_beta_hash.out"
+						mv -v "$PWD"/sana.align "$result_path"/"sana_f_beta_hash.align"
+								
+				done
+				
+			done
+			
+			for network_type in syeast0_compliment_node_del_100_remove_edges_0.3 
+			do					
+				base_network="$network_type"_iter_"$j" 
+				
+				for network in syeast0_complement
+				do			
+
+						#for beta in 1
+						#do
+						#	result_path="$PWD"/"$output_dir"/"$run_time"min/"Weighted_Accuracy_$beta"/"$base_network"_"$network"_"$i"
+						#	mkdir -p "$result_path"	
+						#	./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -wacc 1 -waccAlpha "$beta" -truealignment true_alignments/"$base_network".align
+						#	mv -v "$PWD"/sana.out "$result_path"/"sana_weighted_accuracy_$beta.out"
+						#	mv -v "$PWD"/sana.align "$result_path"/"sana_weighted_accuracy_$beta.align"
+						#						
+						#done
+						
+						for beta in 1 0.33 3 0.1 10 
+						do
+							result_path="$PWD"/"$output_dir"/"$run_time"min/"F$beta"/"$base_network"_"$network"_"$i"
+							mkdir -p "$result_path"	
+							./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -fbeta 1 -b "$beta" -truealignment true_alignments/"$base_network".align
+							mv -v "$PWD"/sana.out "$result_path"/"sana_f$beta.out"
+							mv -v "$PWD"/sana.align "$result_path"/"sana_f$beta.align"
+												
+						done
+						
+						#result_path="$PWD"/"$output_dir"/"$run_time"min/"F_Beta_Star"/"$base_network"_"$network"_"$i"
+						#mkdir -p "$result_path"		
+						#./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -fbetastar 1 -truealignment true_alignments/"$base_network".align
+						#mv -v "$PWD"/sana.out "$result_path"/"sana_f_beta_star.out"
+						#mv -v "$PWD"/sana.align "$result_path"/"sana_f_beta_star.align"
+						
+						result_path="$PWD"/"$output_dir"/"$run_time"min/"EC"/"$base_network"_"$network"_"$i"
+						mkdir -p "$result_path"		
+						./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -ec 1 -truealignment true_alignments/"$base_network".align
+						mv -v "$PWD"/sana.out "$result_path"/"sana_ec.out"
+						mv -v "$PWD"/sana.align "$result_path"/"sana_ec.align"
+						
+						result_path="$PWD"/"$output_dir"/"$run_time"min/"ICS"/"$base_network"_"$network"_"$i"
+						mkdir -p "$result_path"		
+						./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -ics 1 -truealignment true_alignments/"$base_network".align
+						mv -v "$PWD"/sana.out "$result_path"/"sana_ics.out"
+						mv -v "$PWD"/sana.align "$result_path"/"sana_ics.align"
+						
+						#result_path="$PWD"/"$output_dir"/"$run_time"min/"MCC"/"$base_network"_"$network"_"$i"
+						#mkdir -p "$result_path"		
+						#./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -mcc 1 -truealignment true_alignments/"$base_network".align
+						#mv -v "$PWD"/sana.out "$result_path"/"sana_mcc.out"
+						#mv -v "$PWD"/sana.align "$result_path"/"sana_mcc.align"
+						#
+						#result_path="$PWD"/"$output_dir"/"$run_time"min/"MK"/"$base_network"_"$network"_"$i"
+						#mkdir -p "$result_path"		
+						#./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -mk 1 -truealignment true_alignments/"$base_network".align
+						#mv -v "$PWD"/sana.out "$result_path"/"sana_mk.out"
+						#mv -v "$PWD"/sana.align "$result_path"/"sana_mk.align"
+						#
+						#result_path="$PWD"/"$output_dir"/"$run_time"min/"BM"/"$base_network"_"$network"_"$i"
+						#mkdir -p "$result_path"		
+						#./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -bm 1 -truealignment true_alignments/"$base_network".align
+						#mv -v "$PWD"/sana.out "$result_path"/"sana_bm.out"
+						#mv -v "$PWD"/sana.align "$result_path"/"sana_bm.align"
+						
+						result_path="$PWD"/"$output_dir"/"$run_time"min/"S3"/"$base_network"_"$network"_"$i"
+						mkdir -p "$result_path"
+						./sana -g1 "$base_network" -g2 "$network" -t $run_time -truealignment true_alignments/"$base_network".align
+						mv -v "$PWD"/sana.out "$result_path"/sana_s3.out
+						mv -v "$PWD"/sana.align "$result_path"/sana_s3.align
+
+						result_path="$PWD"/"$output_dir"/"$run_time"min/"F_Beta_Hash"/"$base_network"_"$network"_"$i"
+						mkdir -p "$result_path"		
+						./sana -g1 "$base_network" -g2 "$network" -t $run_time -s3 0 -fbetahash 1 -truealignment true_alignments/"$base_network".align
+						mv -v "$PWD"/sana.out "$result_path"/"sana_f_beta_hash.out"
+						mv -v "$PWD"/sana.align "$result_path"/"sana_f_beta_hash.align"
+								
+				done
+				
+			done
+		done
+	done	
+done
+
+ 
